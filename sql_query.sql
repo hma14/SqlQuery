@@ -418,3 +418,36 @@ order by BusinessEntityID
 --Truncate is used to delete table content and the action can not be 
 --rolled back, whereas Delete is used to delete one or more rows in 
 --the table and can be rolled back.
+
+--Cursor Examples
+DECLARE Employee_Cursor CURSOR FOR
+SELECT BusinessEntityID, JobTitle
+FROM AdventureWorks2014.HumanResources.Employee;
+
+
+OPEN Employee_Cursor;
+FETCH NEXT FROM Employee_Cursor;
+WHILE @@FETCH_STATUS = 0
+   BEGIN
+      FETCH NEXT FROM Employee_Cursor;
+   END;
+CLOSE Employee_Cursor;
+DEALLOCATE Employee_Cursor;
+
+print @@FETCH_STATUS
+
+GO
+
+DECLARE @NAME NVARCHAR(50)
+DECLARE @GETNAME CURSOR
+SET @GETNAME = CURSOR FOR SELECT NAME FROM LOTTOS
+OPEN @GETNAME
+FETCH NEXT FROM @GETNAME INTO @NAME
+WHILE @@FETCH_STATUS = 0
+	BEGIN
+		PRINT @NAME
+		FETCH NEXT
+		FROM @GETNAME INTO @NAME
+	END
+CLOSE @GETNAME
+DEALLOCATE @GETNAME
